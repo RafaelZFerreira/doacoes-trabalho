@@ -1,0 +1,506 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lato:wght@300;400;700&display=swap');
+
+/* ==================== VARIÁVEIS ==================== */
+:root {
+  --verde:       #2e7d32;
+  --verde-light: #43a047;
+  --verde-soft:  #e8f5e9;
+  --verde-card:  #c8e6c9;
+  --laranja:     #e65100;
+  --laranja-light:#ff6d00;
+  --azul:        #1565c0;
+  --azul-light:  #1e88e5;
+  --cinza-bg:    #f5f6fa;
+  --cinza-borda: #dee2e6;
+  --texto:       #212529;
+  --texto-muted: #6c757d;
+  --branco:      #ffffff;
+  --sombra:      0 2px 12px rgba(0,0,0,.10);
+  --sombra-hover:0 6px 24px rgba(0,0,0,.16);
+  --radius:      12px;
+  --radius-sm:   8px;
+}
+
+/* ==================== BASE ==================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Lato', sans-serif;
+  background: var(--cinza-bg);
+  color: var(--texto);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1,h2,h3,h4,h5,h6 { font-family: 'Nunito', sans-serif; font-weight: 800; }
+
+/* ==================== NAVBAR ==================== */
+.navbar-solidario {
+  background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 60%, #388e3c 100%);
+  padding: 0 1.5rem;
+  box-shadow: 0 3px 16px rgba(0,0,0,.20);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-solidario .navbar-brand {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 1.45rem;
+  color: #fff !important;
+  letter-spacing: -.5px;
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+}
+
+.navbar-solidario .navbar-brand .brand-icon {
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,.18);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+}
+
+.navbar-solidario .nav-link {
+  color: rgba(255,255,255,.85) !important;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: .92rem;
+  padding: 1.15rem .85rem !important;
+  border-bottom: 3px solid transparent;
+  transition: all .2s;
+  letter-spacing: .2px;
+}
+
+.navbar-solidario .nav-link:hover,
+.navbar-solidario .nav-link.active {
+  color: #fff !important;
+  border-bottom-color: #a5d6a7;
+  background: rgba(255,255,255,.08);
+}
+
+.navbar-toggler { border: none; }
+.navbar-toggler-icon { filter: invert(1); }
+
+/* ==================== HERO (apenas home) ==================== */
+.hero {
+  background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 55%, #388e3c 100%);
+  color: #fff;
+  padding: 5rem 1.5rem 4rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='14'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.hero-title {
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 900;
+  text-shadow: 0 2px 8px rgba(0,0,0,.25);
+  position: relative;
+}
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  opacity: .88;
+  max-width: 600px;
+  margin: 1rem auto 0;
+  line-height: 1.7;
+  position: relative;
+}
+
+/* ==================== PAGE HEADER ==================== */
+.page-header {
+  background: var(--branco);
+  border-bottom: 1px solid var(--cinza-borda);
+  padding: 1.6rem 0 1.4rem;
+  margin-bottom: 2rem;
+}
+
+.page-header h1 {
+  font-size: 1.7rem;
+  color: var(--verde);
+}
+
+.page-header p {
+  color: var(--texto-muted);
+  margin: .2rem 0 0;
+  font-size: .95rem;
+}
+
+/* ==================== CARDS DASHBOARD ==================== */
+.stat-card {
+  background: var(--branco);
+  border-radius: var(--radius);
+  padding: 1.5rem 1.6rem;
+  box-shadow: var(--sombra);
+  border-left: 5px solid transparent;
+  transition: transform .2s, box-shadow .2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--sombra-hover);
+}
+
+.stat-card::after {
+  content: '';
+  position: absolute;
+  right: -20px; top: -20px;
+  width: 90px; height: 90px;
+  border-radius: 50%;
+  opacity: .08;
+}
+
+.stat-card.verde  { border-left-color: var(--verde); }
+.stat-card.verde::after  { background: var(--verde); }
+.stat-card.laranja{ border-left-color: var(--laranja-light); }
+.stat-card.laranja::after{ background: var(--laranja-light); }
+.stat-card.azul   { border-left-color: var(--azul-light); }
+.stat-card.azul::after   { background: var(--azul-light); }
+.stat-card.roxo   { border-left-color: #8e24aa; }
+.stat-card.roxo::after   { background: #8e24aa; }
+
+.stat-card .stat-icon {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem;
+  margin-bottom: .8rem;
+}
+
+.stat-card.verde  .stat-icon { background: var(--verde-soft); color: var(--verde); }
+.stat-card.laranja .stat-icon { background: #fff3e0; color: var(--laranja); }
+.stat-card.azul   .stat-icon { background: #e3f2fd; color: var(--azul); }
+.stat-card.roxo   .stat-icon { background: #f3e5f5; color: #8e24aa; }
+
+.stat-card .stat-number {
+  font-family: 'Nunito', sans-serif;
+  font-size: 2.4rem;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--texto);
+}
+
+.stat-card .stat-label {
+  font-size: .88rem;
+  color: var(--texto-muted);
+  font-weight: 600;
+  margin-top: .3rem;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+/* ==================== CARDS AÇÃO (home) ==================== */
+.action-card {
+  background: var(--branco);
+  border-radius: var(--radius);
+  box-shadow: var(--sombra);
+  padding: 2rem 1.6rem;
+  text-align: center;
+  transition: transform .25s, box-shadow .25s;
+  border-top: 4px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--texto);
+  display: block;
+}
+
+.action-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--sombra-hover);
+  color: var(--texto);
+  text-decoration: none;
+}
+
+.action-card.verde  { border-top-color: var(--verde); }
+.action-card.laranja{ border-top-color: var(--laranja-light); }
+.action-card.azul   { border-top-color: var(--azul-light); }
+.action-card.roxo   { border-top-color: #8e24aa; }
+
+.action-card .ac-icon {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.8rem;
+  margin: 0 auto 1rem;
+}
+
+.action-card.verde  .ac-icon { background: var(--verde-soft); color: var(--verde); }
+.action-card.laranja .ac-icon{ background: #fff3e0; color: var(--laranja); }
+.action-card.azul   .ac-icon { background: #e3f2fd; color: var(--azul); }
+.action-card.roxo   .ac-icon { background: #f3e5f5; color: #8e24aa; }
+
+.action-card h5 { font-size: 1.05rem; margin-bottom: .4rem; font-weight: 800; }
+.action-card p  { font-size: .88rem; color: var(--texto-muted); margin: 0; }
+
+/* ==================== FORMULÁRIOS ==================== */
+.form-card {
+  background: var(--branco);
+  border-radius: var(--radius);
+  box-shadow: var(--sombra);
+  padding: 2rem 2.2rem;
+}
+
+.form-section-title {
+  font-family: 'Nunito', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--verde);
+  border-bottom: 2px solid var(--verde-card);
+  padding-bottom: .5rem;
+  margin-bottom: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+.form-control, .form-select {
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--cinza-borda);
+  padding: .65rem 1rem;
+  font-size: .95rem;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--verde-light);
+  box-shadow: 0 0 0 3px rgba(67,160,71,.18);
+  outline: none;
+}
+
+.form-label {
+  font-weight: 700;
+  font-size: .9rem;
+  color: var(--texto);
+  margin-bottom: .35rem;
+}
+
+/* ==================== BOTÕES ==================== */
+.btn-solidario {
+  background: linear-gradient(135deg, var(--verde), var(--verde-light));
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: .65rem 1.5rem;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: .95rem;
+  transition: all .2s;
+  box-shadow: 0 2px 8px rgba(46,125,50,.3);
+}
+
+.btn-solidario:hover {
+  background: linear-gradient(135deg, #1b5e20, var(--verde));
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(46,125,50,.4);
+}
+
+.btn-outline-solidario {
+  border: 2px solid var(--verde);
+  color: var(--verde);
+  border-radius: var(--radius-sm);
+  padding: .6rem 1.4rem;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  background: transparent;
+  transition: all .2s;
+}
+
+.btn-outline-solidario:hover {
+  background: var(--verde);
+  color: #fff;
+}
+
+/* ==================== TABELAS ==================== */
+.table-card {
+  background: var(--branco);
+  border-radius: var(--radius);
+  box-shadow: var(--sombra);
+  overflow: hidden;
+}
+
+.table-card .table-header {
+  background: linear-gradient(135deg, #1b5e20, var(--verde));
+  color: #fff;
+  padding: 1.2rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table-card .table-header h5 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.table-responsive { border-radius: 0; }
+
+.table { margin: 0; }
+
+.table thead th {
+  background: #f8f9fa;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: .82rem;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: var(--texto-muted);
+  border-bottom: 2px solid var(--cinza-borda);
+  padding: .85rem 1rem;
+  white-space: nowrap;
+}
+
+.table tbody td {
+  padding: .85rem 1rem;
+  vertical-align: middle;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: .93rem;
+}
+
+.table tbody tr:hover { background: var(--verde-soft); }
+.table tbody tr:last-child td { border-bottom: none; }
+
+/* ==================== BADGES ==================== */
+.badge-status {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: .78rem;
+  padding: .35em .75em;
+  border-radius: 20px;
+  letter-spacing: .3px;
+}
+
+.badge-disponivel  { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+.badge-indisponivel{ background: #ffebee; color: #c62828; border: 1px solid #ef9a9a; }
+.badge-atendida    { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
+.badge-pendente    { background: #fff8e1; color: #f57f17; border: 1px solid #ffe082; }
+
+/* ==================== PAGINAÇÃO ==================== */
+.pagination-container { padding: 1rem 1.5rem; background: #f8f9fa; border-top: 1px solid var(--cinza-borda); }
+
+.pag-btn {
+  background: var(--branco);
+  border: 1.5px solid var(--cinza-borda);
+  color: var(--verde);
+  border-radius: var(--radius-sm);
+  padding: .4rem .9rem;
+  font-weight: 700;
+  font-size: .88rem;
+  cursor: pointer;
+  transition: all .2s;
+}
+
+.pag-btn:hover:not(:disabled) { background: var(--verde); color: #fff; border-color: var(--verde); }
+.pag-btn:disabled { opacity: .4; cursor: not-allowed; }
+.pag-info { font-size: .88rem; color: var(--texto-muted); font-weight: 600; }
+
+/* ==================== ALERTS / TOAST ==================== */
+#toast-container {
+  position: fixed;
+  top: 80px; right: 1.5rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+  pointer-events: none;
+}
+
+.toast-msg {
+  background: var(--branco);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 20px rgba(0,0,0,.18);
+  padding: .85rem 1.2rem;
+  font-weight: 700;
+  font-size: .9rem;
+  border-left: 4px solid var(--verde);
+  animation: slideIn .3s ease;
+  pointer-events: all;
+  max-width: 340px;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+
+.toast-msg.erro { border-left-color: #c62828; }
+.toast-msg.aviso { border-left-color: var(--laranja-light); }
+
+@keyframes slideIn {
+  from { transform: translateX(120%); opacity: 0; }
+  to   { transform: translateX(0);   opacity: 1; }
+}
+
+/* ==================== LOADING ==================== */
+.loading-overlay {
+  display: flex; align-items: center; justify-content: center;
+  padding: 3rem;
+  color: var(--texto-muted);
+  gap: .8rem;
+  font-weight: 600;
+}
+
+.spinner {
+  width: 28px; height: 28px;
+  border: 3px solid var(--verde-card);
+  border-top-color: var(--verde);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ==================== MODAL ==================== */
+.modal-content { border-radius: var(--radius); border: none; box-shadow: 0 10px 40px rgba(0,0,0,.2); }
+.modal-header { background: linear-gradient(135deg, #1b5e20, var(--verde)); color: #fff; border-radius: var(--radius) var(--radius) 0 0; }
+.modal-title { font-family: 'Nunito', sans-serif; font-weight: 800; }
+.btn-close { filter: invert(1); }
+
+/* ==================== EMPTY STATE ==================== */
+.empty-state {
+  text-align: center;
+  padding: 3.5rem 1rem;
+  color: var(--texto-muted);
+}
+
+.empty-state .empty-icon {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  opacity: .4;
+}
+
+.empty-state p { font-size: 1rem; font-weight: 600; }
+
+/* ==================== FOOTER ==================== */
+footer {
+  background: #1b5e20;
+  color: rgba(255,255,255,.75);
+  text-align: center;
+  padding: 1.5rem;
+  font-size: .88rem;
+  margin-top: auto;
+}
+
+footer strong { color: #a5d6a7; }
+
+/* ==================== UTILITÁRIOS ==================== */
+.gap-2 { gap: .5rem; }
+.text-verde { color: var(--verde) !important; }
+.bg-verde-soft { background: var(--verde-soft); }
+
+@media (max-width: 768px) {
+  .form-card { padding: 1.4rem 1.2rem; }
+  .hero { padding: 3rem 1rem 2.5rem; }
+  .stat-card .stat-number { font-size: 1.9rem; }
+}
