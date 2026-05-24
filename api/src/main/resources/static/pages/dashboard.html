@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard — SolidárioUNIG</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    .progress-solidario {
+      height: 12px;
+      border-radius: 20px;
+      background: #e8f5e9;
+      overflow: hidden;
+    }
+    .progress-solidario .progress-bar { border-radius: 20px; }
+
+    .resumo-card {
+      background: var(--branco);
+      border-radius: var(--radius);
+      box-shadow: var(--sombra);
+      padding: 1.5rem;
+    }
+
+    .item-row {
+      display: flex; align-items: center; gap: .8rem;
+      padding: .6rem 0; border-bottom: 1px solid #f0f0f0;
+    }
+    .item-row:last-child { border-bottom: none; }
+    .item-dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-solidario navbar-expand-lg">
+  <div class="container-xl">
+    <a class="navbar-brand" href="../index.html"><span class="brand-icon">🤝</span> SolidárioUNIG</a>
+    <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="../index.html">🏠 Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="doadores.html">👥 Doadores</a></li>
+        <li class="nav-item"><a class="nav-link" href="beneficiarios.html">🙏 Beneficiários</a></li>
+        <li class="nav-item"><a class="nav-link" href="itens.html">📦 Itens</a></li>
+        <li class="nav-item"><a class="nav-link" href="solicitacoes.html">📋 Solicitações</a></li>
+        <li class="nav-item"><a class="nav-link" href="dashboard.html">📊 Dashboard</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div id="toast-container"></div>
+
+<div class="page-header">
+  <div class="container-xl">
+    <h1>📊 Dashboard</h1>
+    <p>Visão geral do sistema de doações</p>
+  </div>
+</div>
+
+<div class="container-xl pb-5">
+
+  <!-- CARDS TOPO -->
+  <div class="row g-3 mb-4" id="cards-topo">
+    <div class="col-6 col-md-3">
+      <div class="stat-card verde">
+        <div class="stat-icon">👥</div>
+        <div class="stat-number" id="n-doadores"><div class="spinner" style="width:20px;height:20px;border-width:2px;"></div></div>
+        <div class="stat-label">Doadores</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card laranja">
+        <div class="stat-icon">🙏</div>
+        <div class="stat-number" id="n-benef"><div class="spinner" style="width:20px;height:20px;border-width:2px;"></div></div>
+        <div class="stat-label">Beneficiários</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card azul">
+        <div class="stat-icon">📦</div>
+        <div class="stat-number" id="n-itens"><div class="spinner" style="width:20px;height:20px;border-width:2px;"></div></div>
+        <div class="stat-label">Itens</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card roxo">
+        <div class="stat-icon">📋</div>
+        <div class="stat-number" id="n-sol"><div class="spinner" style="width:20px;height:20px;border-width:2px;"></div></div>
+        <div class="stat-label">Solicitações</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+
+    <!-- PAINEL ITENS: Disponível vs Indisponível -->
+    <div class="col-md-6">
+      <div class="resumo-card h-100">
+        <h6 style="font-weight:800;color:#2e7d32;margin-bottom:1.2rem;">📦 Status dos Itens</h6>
+        <div id="painel-itens">
+          <div class="loading-overlay"><div class="spinner"></div> Carregando...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAINEL SOLICITAÇÕES: Atendida vs Pendente -->
+    <div class="col-md-6">
+      <div class="resumo-card h-100">
+        <h6 style="font-weight:800;color:#2e7d32;margin-bottom:1.2rem;">📋 Status das Solicitações</h6>
+        <div id="painel-sol">
+          <div class="loading-overlay"><div class="spinner"></div> Carregando...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ÚLTIMOS DOADORES -->
+    <div class="col-md-6">
+      <div class="resumo-card h-100">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h6 style="font-weight:800;color:#2e7d32;margin:0;">👥 Últimos Doadores</h6>
+          <a href="doadores.html" class="btn btn-sm btn-outline-solidario" style="font-size:.8rem;">Ver todos</a>
+        </div>
+        <div id="lista-doadores">
+          <div class="loading-overlay"><div class="spinner"></div> Carregando...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ÚLTIMAS SOLICITAÇÕES -->
+    <div class="col-md-6">
+      <div class="resumo-card h-100">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h6 style="font-weight:800;color:#2e7d32;margin:0;">📋 Últimas Solicitações</h6>
+          <a href="solicitacoes.html" class="btn btn-sm btn-outline-solidario" style="font-size:.8rem;">Ver todas</a>
+        </div>
+        <div id="lista-sol">
+          <div class="loading-overlay"><div class="spinner"></div> Carregando...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACESSO RÁPIDO -->
+    <div class="col-12">
+      <div class="resumo-card">
+        <h6 style="font-weight:800;color:#2e7d32;margin-bottom:1.2rem;">⚡ Ações Rápidas</h6>
+        <div class="row g-2">
+          <div class="col-6 col-sm-3">
+            <a href="doadores.html" class="btn btn-solidario w-100">👥 Novo Doador</a>
+          </div>
+          <div class="col-6 col-sm-3">
+            <a href="beneficiarios.html" class="btn btn-solidario w-100">🙏 Novo Beneficiário</a>
+          </div>
+          <div class="col-6 col-sm-3">
+            <a href="itens.html" class="btn btn-solidario w-100">📦 Novo Item</a>
+          </div>
+          <div class="col-6 col-sm-3">
+            <a href="solicitacoes.html" class="btn btn-solidario w-100">📋 Nova Solicitação</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>Desenvolvido para <strong>UNIG</strong> — Sistema de Gestão de Doações Solidárias</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../js/app.js"></script>
+<script>
+async function carregarDashboard() {
+  try {
+    const [dResp, bResp, iResp, sResp] = await Promise.all([
+      api('/doadores?size=5'),
+      api('/beneficiarios?size=1'),
+      api('/itens?size=200'),
+      api('/solicitacoes?size=200'),
+    ]);
+
+    // Contadores
+    document.getElementById('n-doadores').textContent = dResp?.totalElements ?? 0;
+    document.getElementById('n-benef').textContent    = bResp?.totalElements ?? 0;
+    document.getElementById('n-itens').textContent    = iResp?.totalElements ?? 0;
+    document.getElementById('n-sol').textContent      = sResp?.totalElements ?? 0;
+
+    // Status Itens
+    const itens = iResp?.content ?? [];
+    const disp = itens.filter(i => i.status === 'DISPONIVEL').length;
+    const indisp = itens.length - disp;
+    const percDisp = itens.length ? Math.round(disp / itens.length * 100) : 0;
+    document.getElementById('painel-itens').innerHTML = `
+      <div class="mb-3">
+        <div class="d-flex justify-content-between mb-1">
+          <span style="font-weight:700;font-size:.9rem;">✅ Disponíveis</span>
+          <strong>${disp}</strong>
+        </div>
+        <div class="progress-solidario">
+          <div class="progress-bar bg-success" style="width:${percDisp}%"></div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <div class="d-flex justify-content-between mb-1">
+          <span style="font-weight:700;font-size:.9rem;">❌ Indisponíveis</span>
+          <strong>${indisp}</strong>
+        </div>
+        <div class="progress-solidario">
+          <div class="progress-bar bg-danger" style="width:${100-percDisp}%"></div>
+        </div>
+      </div>
+      <div class="mt-3 p-3" style="background:#f8f9fa;border-radius:8px;text-align:center;">
+        <div style="font-size:2rem;font-weight:900;color:#2e7d32;">${percDisp}%</div>
+        <div style="font-size:.85rem;color:#6c757d;font-weight:600;">dos itens disponíveis</div>
+      </div>`;
+
+    // Status Solicitações
+    const solic = sResp?.content ?? [];
+    const atend = solic.filter(s => s.status === 'ATENDIDA').length;
+    const pend  = solic.length - atend;
+    const percAt = solic.length ? Math.round(atend / solic.length * 100) : 0;
+    document.getElementById('painel-sol').innerHTML = `
+      <div class="mb-3">
+        <div class="d-flex justify-content-between mb-1">
+          <span style="font-weight:700;font-size:.9rem;">✅ Atendidas</span>
+          <strong>${atend}</strong>
+        </div>
+        <div class="progress-solidario">
+          <div class="progress-bar" style="width:${percAt}%;background:#1565c0;"></div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <div class="d-flex justify-content-between mb-1">
+          <span style="font-weight:700;font-size:.9rem;">⏳ Pendentes</span>
+          <strong>${pend}</strong>
+        </div>
+        <div class="progress-solidario">
+          <div class="progress-bar" style="width:${100-percAt}%;background:#f57f17;"></div>
+        </div>
+      </div>
+      <div class="mt-3 p-3" style="background:#f8f9fa;border-radius:8px;text-align:center;">
+        <div style="font-size:2rem;font-weight:900;color:#1565c0;">${percAt}%</div>
+        <div style="font-size:.85rem;color:#6c757d;font-weight:600;">das solicitações atendidas</div>
+      </div>`;
+
+    // Últimos doadores
+    const doadores = dResp?.content ?? [];
+    if (!doadores.length) {
+      document.getElementById('lista-doadores').innerHTML = `<div class="empty-state"><div class="empty-icon">👥</div><p>Nenhum doador cadastrado.</p></div>`;
+    } else {
+      document.getElementById('lista-doadores').innerHTML = doadores.map(d => `
+        <div class="item-row">
+          <div class="item-dot" style="background:#2e7d32;"></div>
+          <div style="flex:1;">
+            <div style="font-weight:700;font-size:.93rem;">${d.nome}</div>
+            <div style="font-size:.82rem;color:#6c757d;">${d.contato?.email ?? ''}</div>
+          </div>
+          <div style="font-size:.82rem;color:#6c757d;">${d.endereco?.cidade ?? ''}</div>
+        </div>`).join('');
+    }
+
+    // Últimas solicitações
+    const ultSol = solic.slice(-5).reverse();
+    if (!ultSol.length) {
+      document.getElementById('lista-sol').innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><p>Nenhuma solicitação.</p></div>`;
+    } else {
+      document.getElementById('lista-sol').innerHTML = ultSol.map(s => {
+        const atendida = s.status === 'ATENDIDA';
+        const desc = s.descricao?.length > 45 ? s.descricao.substring(0,45)+'…' : (s.descricao ?? '—');
+        return `
+        <div class="item-row">
+          <div class="item-dot" style="background:${atendida ? '#1565c0' : '#f57f17'};"></div>
+          <div style="flex:1;">
+            <div style="font-weight:700;font-size:.9rem;">${s.nomeBeneficiario ?? '—'}</div>
+            <div style="font-size:.82rem;color:#6c757d;">${desc}</div>
+          </div>
+          <span class="badge-status ${atendida ? 'badge-atendida' : 'badge-pendente'}" style="white-space:nowrap;">
+            ${atendida ? '✅' : '⏳'} ${s.status}
+          </span>
+        </div>`;
+      }).join('');
+    }
+
+  } catch { /* toast já exibido */ }
+}
+
+carregarDashboard();
+</script>
+</body>
+</html>

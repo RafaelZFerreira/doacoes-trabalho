@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Itens — SolidárioUNIG</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="../css/style.css"/>
+</head>
+<body>
+
+<nav class="navbar navbar-solidario navbar-expand-lg">
+  <div class="container-xl">
+    <a class="navbar-brand" href="../index.html"><span class="brand-icon">🤝</span> SolidárioUNIG</a>
+    <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="../index.html">🏠 Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="doadores.html">👥 Doadores</a></li>
+        <li class="nav-item"><a class="nav-link" href="beneficiarios.html">🙏 Beneficiários</a></li>
+        <li class="nav-item"><a class="nav-link" href="itens.html">📦 Itens</a></li>
+        <li class="nav-item"><a class="nav-link" href="solicitacoes.html">📋 Solicitações</a></li>
+        <li class="nav-item"><a class="nav-link" href="dashboard.html">📊 Dashboard</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div id="toast-container"></div>
+
+<div class="page-header">
+  <div class="container-xl">
+    <h1>📦 Itens para Doação</h1>
+    <p>Cadastre e controle os itens disponíveis para doação</p>
+  </div>
+</div>
+
+<div class="container-xl pb-5">
+  <div class="row g-4">
+
+    <!-- FORMULÁRIO -->
+    <div class="col-lg-4">
+      <div class="form-card">
+        <h5 class="mb-4" style="color:#2e7d32;font-weight:800;">➕ Novo Item</h5>
+
+        <div class="mb-3">
+          <label class="form-label">Nome do Item *</label>
+          <input type="text" class="form-control" id="nome" placeholder="Ex: Cesta básica"/>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Quantidade *</label>
+          <input type="number" class="form-control" id="quantidade" min="1" placeholder="10"/>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Status *</label>
+          <select class="form-select" id="status">
+            <option value="">Selecione...</option>
+            <option value="DISPONIVEL">✅ Disponível</option>
+            <option value="INDISPONIVEL">❌ Indisponível</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label class="form-label">Doador Responsável *</label>
+          <select class="form-select" id="idDoador">
+            <option value="">Carregando doadores...</option>
+          </select>
+        </div>
+
+        <div class="d-flex gap-2">
+          <button class="btn btn-solidario flex-fill" onclick="salvarItem()">💾 Salvar Item</button>
+          <button class="btn btn-outline-secondary" onclick="limparForm()">✕</button>
+        </div>
+      </div>
+
+      <!-- INFO CARD -->
+      <div class="form-card mt-3" style="border-left:4px solid #1565c0;background:#e3f2fd;">
+        <p style="margin:0;font-size:.88rem;color:#1565c0;font-weight:700;">
+          💡 <strong>Dica:</strong> O item precisa estar vinculado a um doador já cadastrado.
+          <a href="doadores.html" style="color:#1565c0;">Cadastre um doador primeiro</a> caso necessário.
+        </p>
+      </div>
+    </div>
+
+    <!-- TABELA -->
+    <div class="col-lg-8">
+      <div class="table-card">
+        <div class="table-header">
+          <h5>📋 Lista de Itens</h5>
+          <button class="btn btn-sm btn-light fw-bold" onclick="carregar(0)">🔄 Atualizar</button>
+        </div>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Item</th>
+                <th>Quantidade</th>
+                <th>Status</th>
+                <th>Doador</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tabela">
+              <tr><td colspan="6"><div class="loading-overlay"><div class="spinner"></div> Carregando...</div></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination-container" id="paginacao"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDIÇÃO -->
+<div class="modal fade" id="modalEditar" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">✏️ Editar Item</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="edit-id"/>
+        <div class="mb-3">
+          <label class="form-label">Nome do Item</label>
+          <input type="text" class="form-control" id="edit-nome"/>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Quantidade</label>
+          <input type="number" class="form-control" id="edit-quantidade" min="1"/>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Status</label>
+          <select class="form-select" id="edit-status">
+            <option value="DISPONIVEL">✅ Disponível</option>
+            <option value="INDISPONIVEL">❌ Indisponível</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-solidario" onclick="atualizar()">💾 Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>Desenvolvido para <strong>UNIG</strong> — Sistema de Gestão de Doações Solidárias</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../js/app.js"></script>
+<script>
+let pagina = 0;
+const modal = new bootstrap.Modal(document.getElementById('modalEditar'));
+
+async function carregarDoadores() {
+  try {
+    const data = await api('/doadores?size=200');
+    const sel = document.getElementById('idDoador');
+    const lista = data?.content ?? [];
+    if (!lista.length) {
+      sel.innerHTML = '<option value="">Nenhum doador cadastrado</option>';
+    } else {
+      sel.innerHTML = '<option value="">Selecione o doador...</option>' +
+        lista.map(d => `<option value="${d.id}">${d.nome}</option>`).join('');
+    }
+  } catch {}
+}
+
+async function carregar(pg = 0) {
+  pagina = pg;
+  const tbody = document.getElementById('tabela');
+  tbody.innerHTML = `<tr><td colspan="6"><div class="loading-overlay"><div class="spinner"></div> Carregando...</div></td></tr>`;
+  try {
+    const data = await api(`/itens?page=${pg}&size=10`);
+    const lista = data?.content ?? [];
+    if (!lista.length) {
+      tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">📦</div><p>Nenhum item cadastrado.</p></div></td></tr>`;
+    } else {
+      tbody.innerHTML = lista.map(it => {
+        const disp = it.status === 'DISPONIVEL';
+        return `
+        <tr>
+          <td><span class="badge bg-light text-secondary fw-bold">${it.id}</span></td>
+          <td><strong>${it.nome}</strong></td>
+          <td><span class="fw-bold">${it.quantidade}</span> unid.</td>
+          <td><span class="badge-status ${disp ? 'badge-disponivel' : 'badge-indisponivel'}">${disp ? '✅ Disponível' : '❌ Indisponível'}</span></td>
+          <td><small>${it.nomeDoador ?? '—'}</small></td>
+          <td>
+            <div class="d-flex gap-1">
+              <button class="btn btn-sm btn-outline-primary" onclick='abrirEdicao(${JSON.stringify(it)})'>✏️</button>
+              <button class="btn btn-sm btn-outline-danger" onclick="excluir(${it.id})">🗑️</button>
+            </div>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+    const total = data?.totalPages ?? 1;
+    document.getElementById('paginacao').innerHTML = `
+      <div class="d-flex align-items-center gap-3">
+        <button class="pag-btn" ${pagina===0?'disabled':''} onclick="carregar(${pagina-1})">← Anterior</button>
+        <span class="pag-info">Página ${pagina+1} de ${Math.max(total,1)}</span>
+        <button class="pag-btn" ${pagina>=total-1?'disabled':''} onclick="carregar(${pagina+1})">Próxima →</button>
+      </div>`;
+  } catch {}
+}
+
+async function salvarItem() {
+  const nome = document.getElementById('nome').value.trim();
+  const quantidade = Number(document.getElementById('quantidade').value);
+  const status = document.getElementById('status').value;
+  const idDoador = Number(document.getElementById('idDoador').value);
+
+  if (!nome || !quantidade || !status || !idDoador) {
+    toast('Preencha todos os campos obrigatórios', 'aviso'); return;
+  }
+  if (quantidade < 1) { toast('Quantidade deve ser maior que zero', 'aviso'); return; }
+
+  try {
+    await api('/itens', { method: 'POST', body: JSON.stringify({ nome, quantidade, status, idDoador }) });
+    toast('Item cadastrado com sucesso! 📦');
+    limparForm();
+    carregar(0);
+  } catch {}
+}
+
+function abrirEdicao(it) {
+  document.getElementById('edit-id').value = it.id;
+  document.getElementById('edit-nome').value = it.nome ?? '';
+  document.getElementById('edit-quantidade').value = it.quantidade ?? '';
+  document.getElementById('edit-status').value = it.status ?? 'DISPONIVEL';
+  modal.show();
+}
+
+async function atualizar() {
+  const id = Number(document.getElementById('edit-id').value);
+  const body = {
+    id,
+    nome: document.getElementById('edit-nome').value.trim() || undefined,
+    quantidade: Number(document.getElementById('edit-quantidade').value) || undefined,
+    status: document.getElementById('edit-status').value || undefined,
+  };
+  try {
+    await api('/itens', { method: 'PUT', body: JSON.stringify(body) });
+    toast('Item atualizado!');
+    modal.hide();
+    carregar(pagina);
+  } catch {}
+}
+
+async function excluir(id) {
+  if (!confirmarExclusao('Excluir este item?')) return;
+  try {
+    await api(`/itens/${id}`, { method: 'DELETE' });
+    toast('Item excluído.');
+    carregar(pagina);
+  } catch {}
+}
+
+function limparForm() {
+  ['nome','quantidade','status','idDoador'].forEach(id => {
+    const el = document.getElementById(id);
+    el.value = '';
+  });
+}
+
+carregarDoadores();
+carregar();
+</script>
+</body>
+</html>
